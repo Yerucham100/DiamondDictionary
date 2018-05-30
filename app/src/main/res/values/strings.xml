@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Diamond Dictionary</string>
+    <string name="search">SEARCH</string>
+    <string name="search_hint">Enter search term...</string>
+    <string name="sample_term">Dictionary</string>
+    <string name="sample_meaning">1. a book, optical disc, mobile device, or online lexical resource (such as Dictionary.com) containing a selection of the words of a language, giving information about their meanings, pronunciations, etymologies, inflected forms, derived forms, etc., expressed in either the same or another language; lexicon; glossary. Print dictionaries of various sizes, ranging from small pocket dictionaries to multivolume books, usually sort entries alphabetically, as do typical CD or DVD dictionary applications, allowing one to browse through the terms in sequence. All electronic dictionaries, whether online or installed on a device, can provide immediate, direct access to a search term, its meanings, and ancillary information: an unabridged dictionary of English; a Japanese-English dictionary.
+a book giving information on particular subjects or on a particular class of words, names, or facts, usually arranged alphabetically: a biographical dictionary; a dictionary of mathematics.
+Computers.\n
+
+    2. a list of codes, terms, keys, etc., and their meanings, used by a computer program or system.\n
+    3. a list of words used by a word-processing program as the standard against which to check the spelling of text entered.</string>
+</resources>
