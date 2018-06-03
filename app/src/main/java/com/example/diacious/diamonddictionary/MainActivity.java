@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.diacious.diamonddictionary.utils.DbUtils;
 import com.example.diacious.diamonddictionary.utils.NetworkUtils;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private ProgressBar loadingProgressBar;
     private final int LOADER_ID = 132;
     private final String SEARCH_QUERY_URL_EXTRA = "search_query_url";
+    private final String SEARCH_WORD_EXTRA = "search_word_extra";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,12 +60,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     public void startSearch()
     {
-        String word = searchBoxEditText.getText().toString();
+        String word = searchBoxEditText.getText().toString().toLowerCase();
         Bundle bundle = new Bundle();
         try
         {
             URL url = new URL(NetworkUtils.buildUri(word).toString());
             bundle.putString(SEARCH_QUERY_URL_EXTRA, url.toString());
+            bundle.putString(SEARCH_WORD_EXTRA, word);
         }
         catch (MalformedURLException e)
         {
@@ -98,9 +101,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public String loadInBackground()
             {
                 URL searchUrl;
+                String word;
                 try
                 {
                     searchUrl = new URL(args.getString(SEARCH_QUERY_URL_EXTRA));
+                    word = args.getString(SEARCH_WORD_EXTRA);
                 }
                 catch (MalformedURLException e)
                 {
@@ -110,7 +115,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 String meaning = null;
                 try
                 {
+                    if (DbUtils.getInfoFromDatabase(word, MainActivity.this))
+                    {
+                        Log.d("WORD FOUND=", word);
+                        meaning = DbUtils.getMeaning();
+                        DbUtils.updateWord();
+                        return meaning;
+                    }
+
+                    //If word is not found, search online and insert it in the database
                     meaning = NetworkUtils.getResponseFromUrl(searchUrl);
+
+                    if (!(meaning.equals(NetworkUtils.NO_NETWORK) || meaning.equals(NetworkUtils.WORD_NOT_FOUND)))
+                    {
+                        DbUtils.insertWordInDatabase(word, meaning, MainActivity.this);//TODO This should be done by a service
+                    }
+
                 }
                 catch (IOException e)
                 {

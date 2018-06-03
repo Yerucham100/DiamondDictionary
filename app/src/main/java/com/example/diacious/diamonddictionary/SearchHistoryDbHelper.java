@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SearchHistoryDbHelper extends SQLiteOpenHelper
 {
     public static final String DATABASE_NAME = "diamond_dictionary.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public SearchHistoryDbHelper(Context context)
     {
@@ -28,7 +28,7 @@ public class SearchHistoryDbHelper extends SQLiteOpenHelper
                 + SearchHistoryContract.SearchHistory.COLUMN_WORD + " TEXT NOT NULL, "
                 + SearchHistoryContract.SearchHistory.COLUMN_DEFINITION + " TEXT NOT NULL, "
                 + SearchHistoryContract.SearchHistory.COLUMN_SEARCH_FREQUENCY + " INTEGER NOT NULL, "
-                + SearchHistoryContract.SearchHistory.COLUMN_LAST_SEARCHED + " TIMESTAMP DEFAULT CURRENT TIMESTAMP "
+                + SearchHistoryContract.SearchHistory.COLUMN_LAST_SEARCHED + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP "
                 + ");";
         db.execSQL(CREATE_TABLE);
     }

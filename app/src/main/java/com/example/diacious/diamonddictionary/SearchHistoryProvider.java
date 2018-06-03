@@ -64,7 +64,7 @@ public class SearchHistoryProvider extends ContentProvider
                 result = db.query(SearchHistoryContract.SearchHistory.TABLE_NAME,
                         projection,
                         selection,
-                        null,
+                        selectionArgs,
                         null,
                         null,
                         sortOrder);
@@ -100,6 +100,7 @@ public class SearchHistoryProvider extends ContentProvider
                 break;
             default:throw new UnsupportedOperationException("Invalid Uri for Insert Method: " + uri);
         }
+        getContext().getContentResolver().notifyChange(retUri, null);
         return retUri;
     }
 
