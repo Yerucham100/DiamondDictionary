@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.IntegerRes;
 import android.util.Log;
 
 import com.example.diacious.diamonddictionary.SearchHistoryContract;
@@ -15,6 +16,7 @@ import com.example.diacious.diamonddictionary.SearchHistoryContract;
 
 public class DbUtils
 {
+    private static String mWord = null;
     private static String meaning = null;
     private static String lastSearched = null;
     private static int searchFrequency = 0;
@@ -25,6 +27,7 @@ public class DbUtils
      */
     public static boolean getInfoFromDatabase(String word, Context context)
     {
+        mWord = word;
         ContentResolver resolver = context.getContentResolver();
         Cursor data = resolver.query(SearchHistoryContract.SearchHistory.CONTENT_URI,
                 null,
@@ -45,6 +48,7 @@ public class DbUtils
 
             if (!data.moveToFirst())
                 return false;
+
             meaning = data.getString(definitionCol);
             lastSearched = data.getString(lastSearchedCol);
             searchFrequency = data.getInt(searchFreqCol);
@@ -75,8 +79,18 @@ public class DbUtils
     /**
      * Method to update the lastSearched and searchFrequency of a word
      */
-    public static void updateWord()
+    public static void updateWord(Context context)
     {
+        ContentResolver resolver = context.getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(SearchHistoryContract.SearchHistory.COLUMN_WORD, mWord);
+        values.put(SearchHistoryContract.SearchHistory.COLUMN_DEFINITION, meaning);
+        values.put(SearchHistoryContract.SearchHistory.COLUMN_SEARCH_FREQUENCY, Integer.toString(++searchFrequency));
+
+        resolver.update(SearchHistoryContract.SearchHistory.CONTENT_URI,
+                values,
+                SearchHistoryContract.SearchHistory.COLUMN_WORD + "=?",
+                new String[]{mWord});
 
     }
 

@@ -126,6 +126,12 @@ public class SearchHistoryProvider extends ContentProvider
                         "_id=?",
                         new String[]{id});
                 break;
+            case ALL_SEARCHES:
+                numUpdated = db.update(SearchHistoryContract.SearchHistory.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+                break;
             default:throw new UnsupportedOperationException("Invalid Uri for update: "+ uri);
         }
         return numUpdated;
