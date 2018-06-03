@@ -18,6 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.example.diacious.diamonddictionary"
+            android:name="com.example.diacious.diamonddictionary.SearchHistoryProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -1,17 +1,18 @@
 package com.example.diacious.diamonddictionary.utils;
-
 import android.net.Uri;
+import android.support.v4.content.Loader;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Scanner;
-
 /**
  * Created by DIACIOUS on 5/27/2018.
  */
@@ -19,8 +20,10 @@ import java.util.Scanner;
 public class NetworkUtils
 {
     public static final String ONLINE_DICTIONARY_BASE_URL = "https://od-api.oxforddictionaries.com:443/api/v1/entries";
-    public final static String LANGUAGE = "en";
-    public final static String PARAM_QUERY = "q";
+    public static final String LANGUAGE = "en";
+    public static final String WORD_NOT_FOUND = "word_not_found";
+    private static final String testWord = "car";
+    public static final String NO_NETWORK = "no_network";
 
 
     /**
@@ -48,6 +51,10 @@ public class NetworkUtils
     public static String getResponseFromUrl(URL url) throws IOException
     {
         HttpURLConnection urlConnection =  (HttpURLConnection) url.openConnection();
+
+        if (!testConnection())
+            return NO_NETWORK;
+
         final String app_id = "242e8819";
         final String app_key = "8b3130d87f62115a16a8b93ebdb616b2";
         urlConnection.setRequestProperty("Accept","application/json");
@@ -65,7 +72,7 @@ public class NetworkUtils
             if (hasData)
                 return sc.next();
             else
-                return "no next";
+                return "Scanner could not read from stream";
         }
         finally
         {
@@ -118,7 +125,59 @@ public class NetworkUtils
         {
             e.printStackTrace();
         }
+
         return definition;
+    }
+
+    /**
+     * Method to Test if network is available
+     * @return true if network is available else false
+     */
+    private static final boolean testConnection()
+    {
+        Uri uri = buildUri(testWord);
+        URL url;
+        try
+        {
+            url = new URL(uri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        HttpURLConnection connection;
+        try
+        {
+            connection = (HttpURLConnection) url.openConnection();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        final String app_id = "242e8819";
+        final String app_key = "8b3130d87f62115a16a8b93ebdb616b2";
+        connection.setRequestProperty("Accept","application/json");
+        connection.setRequestProperty("app_id",app_id);
+        connection.setRequestProperty("app_key",app_key);
+        int responseCode;
+        try
+        {
+            responseCode = connection.getResponseCode();
+        }
+
+        catch (IOException e)
+        {
+            return false;
+        }
+        if (responseCode == HttpURLConnection.HTTP_OK)
+            return true;
+
+        else
+            return false;
     }
 
 
