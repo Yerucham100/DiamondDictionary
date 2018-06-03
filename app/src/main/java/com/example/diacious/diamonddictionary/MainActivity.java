@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             {
                 if (args == null)
                     return;
-                
+
                 super.onStartLoading();
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                //forceLoad();
+                forceLoad();
             }
 
             @Override
