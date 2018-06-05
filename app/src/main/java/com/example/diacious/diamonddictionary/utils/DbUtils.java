@@ -50,7 +50,7 @@ public class DbUtils
                 return false;
 
             meaning = data.getString(definitionCol);
-            lastSearched = data.getString(lastSearchedCol);
+            lastSearched = DateUtils.getDateInStandardFormat(data.getString(lastSearchedCol));//Take only the date part of the timestamp
             searchFrequency = data.getInt(searchFreqCol);
         }
         return true;
@@ -100,7 +100,6 @@ public class DbUtils
      */
     public static String getMeaning()
     {
-        Log.d("MEANING", "Meaning searched: " + meaning);
         return meaning;
     }
 
@@ -119,7 +118,7 @@ public class DbUtils
      */
     public static String getSearchFrequency()
     {
-        return Integer.toString(searchFrequency);
+        return Integer.toString(searchFrequency + 1);
     }
 
 }

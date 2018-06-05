@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.diacious.diamonddictionary">
 
-   <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -18,10 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <provider
+            android:name=".SearchHistoryProvider"
             android:authorities="com.example.diacious.diamonddictionary"
-            android:name="com.example.diacious.diamonddictionary.SearchHistoryProvider"
             android:exported="false"/>
+
+        <activity android:name=".SearchHistoryActivity">
+        </activity>
     </application>
 
 </manifest>

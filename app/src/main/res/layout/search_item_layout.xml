@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_margin="16dp">
+
+    <TextView
+        android:id="@+id/search_word_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        tools:text="@string/sample_term"/>
+
+
+    <TextView
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/search_freq_tv_4_search_history_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            tools:text="10"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/search_word_tv"
+            />
+
+    <TextView
+            android:id="@+id/last_search_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            tools:text="2018-06-01"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/search_word_tv"/>
+
+
+
+
+
+</RelativeLayout>

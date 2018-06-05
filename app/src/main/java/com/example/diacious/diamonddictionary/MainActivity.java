@@ -7,6 +7,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.example.diacious.diamonddictionary.utils.NetworkUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String[]>
 {
@@ -143,7 +145,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                     //If word is not found, search online and insert it in the database
                     meaning = NetworkUtils.getResponseFromUrl(searchUrl);
-
+                    frequency = "1";
+                    lastSearched = new Date().toString();//TODO Work on this
                     if (!(meaning.equals(NetworkUtils.NO_NETWORK) || meaning.equals(NetworkUtils.WORD_NOT_FOUND)))
                     {
                         DbUtils.insertWordInDatabase(word, meaning, MainActivity.this);//TODO This should be done by a service

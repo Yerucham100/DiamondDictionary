@@ -70,7 +70,7 @@
         android:visibility="invisible"
         android:textSize="15sp"
         android:textColor="@android:color/black"
-        tools:text="01-06-2018"
+        tools:text="2018-06-01"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/last_searched_label_tv"/>
 
