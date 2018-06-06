@@ -13,4 +13,6 @@ Computers.\n
     <string name="word_not_found">Word not found!</string>
     <string name="last_searched">Last Searched:</string>
     <string name="search_freq">Search Frequency:</string>
+
+    <string name="search_history_menu_item">Search History</string>
 </resources>

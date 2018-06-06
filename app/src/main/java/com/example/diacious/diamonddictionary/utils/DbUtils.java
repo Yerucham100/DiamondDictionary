@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.example.diacious.diamonddictionary.SearchHistoryContract;
 
+import java.sql.Timestamp;
+
 /**
  * Created by DIACIOUS on 6/3/2018.
  */
@@ -86,6 +88,8 @@ public class DbUtils
         values.put(SearchHistoryContract.SearchHistory.COLUMN_WORD, mWord);
         values.put(SearchHistoryContract.SearchHistory.COLUMN_DEFINITION, meaning);
         values.put(SearchHistoryContract.SearchHistory.COLUMN_SEARCH_FREQUENCY, Integer.toString(++searchFrequency));
+        values.put(SearchHistoryContract.SearchHistory.COLUMN_LAST_SEARCHED, new Timestamp(System.currentTimeMillis()).toString()
+                .substring(0,19));//To eliminate the decimal on the second part i.e something like 19:34:23.343 becomes 19:34:23
 
         resolver.update(SearchHistoryContract.SearchHistory.CONTENT_URI,
                 values,

@@ -1,15 +1,24 @@
 package com.example.diacious.diamonddictionary;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-public class SearchHistoryActivity extends AppCompatActivity
+public class SearchHistoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>
+
 {
 
     private RecyclerView searchHistoryRecyclerView;
     private SearchHistoryAdapter adapter;
+    private Cursor searchHistoryCursor;
+
+    private final int LOADER_ID = 133;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -21,10 +30,56 @@ public class SearchHistoryActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
         searchHistoryRecyclerView.setLayoutManager(layoutManager);
 
-        adapter = new SearchHistoryAdapter(null);//TODO Create a loader to source this from the db, this should be in MainActivity
-        //TODO and sent here via intent
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader searchLoader = loaderManager.getLoader(LOADER_ID);
+
+        loaderManager.restartLoader(LOADER_ID, null, this);
+
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args)
+    {
+        return new AsyncTaskLoader<Cursor>(this)
+        {
+            @Override
+            protected void onStartLoading()
+            {
+                if (searchHistoryCursor != null)
+                    return;
+
+                super.onStartLoading();
+                forceLoad();
+            }
+
+            @Override
+            public Cursor loadInBackground()
+            {
+                ContentResolver resolver = getContentResolver();
+                Cursor cursor = resolver.query(SearchHistoryContract.SearchHistory.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        SearchHistoryContract.SearchHistory.COLUMN_LAST_SEARCHED + " ASC");
+
+                return cursor;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data)
+    {
+        searchHistoryCursor = data;
+        adapter = new SearchHistoryAdapter(searchHistoryCursor);
+
         searchHistoryRecyclerView.setAdapter(adapter);
         searchHistoryRecyclerView.setHasFixedSize(false);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader)
+    {
 
     }
 }

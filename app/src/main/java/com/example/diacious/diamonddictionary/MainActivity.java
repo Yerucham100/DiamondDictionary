@@ -1,14 +1,19 @@
 package com.example.diacious.diamonddictionary;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startSearch();
             }
         });
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
     }
 
     /**
@@ -71,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void startSearch()
     {
         String word = searchBoxEditText.getText().toString().toLowerCase();
+
+        if (word.equals("") || TextUtils.isEmpty(word))
+            return;
+
         Bundle bundle = new Bundle();
         try
         {
@@ -200,4 +213,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
+    /**
+     * Method to launch SearchHistoryActivity
+     */
+    private void openSearchHistory()
+    {
+        Intent intent = new Intent(this, SearchHistoryActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId() == R.id.search_hist_menu_item)
+        {
+            openSearchHistory();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
