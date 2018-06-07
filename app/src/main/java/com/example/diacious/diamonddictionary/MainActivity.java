@@ -19,13 +19,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.diacious.diamonddictionary.utils.DateUtils;
 import com.example.diacious.diamonddictionary.utils.DbUtils;
 import com.example.diacious.diamonddictionary.utils.NetworkUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String[]>
@@ -43,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private final int LOADER_ID = 132;
     private final String SEARCH_QUERY_URL_EXTRA = "search_query_url";
     private final String SEARCH_WORD_EXTRA = "search_word_extra";
+
+    private boolean wordUnchanged = true;
+    private String currentWord = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -80,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void startSearch()
     {
         String word = searchBoxEditText.getText().toString().toLowerCase();
+        if (currentWord.equals(word))
+            return;
+
+        currentWord = word;
 
         if (word.equals("") || TextUtils.isEmpty(word))
             return;
@@ -109,13 +119,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     {
         return new AsyncTaskLoader<String[]>(this)
         {
+            String[] searchCache = null;
             @Override
             protected void onStartLoading()
             {
                 if (args == null)
                     return;
 
-                super.onStartLoading();
+                if (searchCache != null)
+                    return;//deliverResult(searchCache);
+
 
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 searchFreqTextView.setVisibility(View.INVISIBLE);
@@ -147,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 {
                     if (DbUtils.getInfoFromDatabase(word, MainActivity.this))
                     {
-                        Log.d("WORD FOUND=", word);
                         meaning = DbUtils.getMeaning();
                         frequency = DbUtils.getSearchFrequency();
                         lastSearched = DbUtils.getLastSearched();
@@ -158,8 +170,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                     //If word is not found, search online and insert it in the database
                     meaning = NetworkUtils.getResponseFromUrl(searchUrl);
-                    frequency = "1";
-                    lastSearched = new Date().toString();//TODO Work on this
+                    frequency = getString(R.string.an_integer, 1);
+                    String timeStamp = new Timestamp(System.currentTimeMillis()).toString();
+                    lastSearched = DateUtils.getDateInStandardFormat(timeStamp);
                     if (!(meaning.equals(NetworkUtils.NO_NETWORK) || meaning.equals(NetworkUtils.WORD_NOT_FOUND)))
                     {
                         DbUtils.insertWordInDatabase(word, meaning, MainActivity.this);//TODO This should be done by a service
@@ -172,6 +185,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
                 return new String[]{meaning, frequency, lastSearched};
             }
+
+            @Override
+            public void deliverResult(String[] data)
+            {
+                super.deliverResult(data);
+                searchCache = data;
+            }
         };
     }
 
@@ -179,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<String[]> loader, String[] data)
     {
         loadingProgressBar.setVisibility(View.INVISIBLE);
-
         String definition;
         if (data[0] == null)
             displayTextView.setText(getString(R.string.word_not_found));

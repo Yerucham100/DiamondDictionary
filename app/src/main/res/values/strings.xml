@@ -15,4 +15,5 @@ Computers.\n
     <string name="search_freq">Search Frequency:</string>
 
     <string name="search_history_menu_item">Search History</string>
+    <string name="an_integer">%d</string>
 </resources>
