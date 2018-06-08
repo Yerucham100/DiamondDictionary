@@ -10,7 +10,7 @@ Computers.\n
     2. a list of codes, terms, keys, etc., and their meanings, used by a computer program or system.\n
     3. a list of words used by a word-processing program as the standard against which to check the spelling of text entered.</string>
     <string name="no_network">No Internet Connection\nPlease check your network and try again</string>
-    <string name="word_not_found">Word not found!</string>
+    <string name="word_not_found">%s was not found in the dictionary!\nCheck the spelling and try again</string>
     <string name="last_searched">Last Searched:</string>
     <string name="search_freq">Search Frequency:</string>
 

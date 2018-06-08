@@ -1,8 +1,7 @@
 package com.example.diacious.diamonddictionary;
 
-import android.content.Context;
+
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -10,8 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,17 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.diacious.diamonddictionary.utils.DateUtils;
 import com.example.diacious.diamonddictionary.utils.DbUtils;
 import com.example.diacious.diamonddictionary.utils.NetworkUtils;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String[]>
 {
@@ -47,7 +41,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private final String SEARCH_QUERY_URL_EXTRA = "search_query_url";
     private final String SEARCH_WORD_EXTRA = "search_word_extra";
 
-    private boolean wordUnchanged = true;
+    private final String SEARCH_BOX_EXTRA = "search_box";
+    private final String DEFINITION_EXTRA = "def_extra";
+
     private String currentWord = "";
 
     @Override
@@ -77,6 +73,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        if (savedInstanceState != null)
+        {
+            if (savedInstanceState.containsKey(SEARCH_BOX_EXTRA))
+                searchBoxEditText.setText(savedInstanceState.getString(SEARCH_BOX_EXTRA));
+            if (savedInstanceState.containsKey(DEFINITION_EXTRA))
+                displayTextView.setText(savedInstanceState.getString(DEFINITION_EXTRA));
+        }
 
     }
 
@@ -201,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         loadingProgressBar.setVisibility(View.INVISIBLE);
         String definition;
         if (data[0] == null)
-            displayTextView.setText(getString(R.string.word_not_found));
+            displayTextView.setText(getString(R.string.word_not_found, currentWord));
 
         else if (data[0].equals(NetworkUtils.NO_NETWORK))
         {
@@ -256,5 +260,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             openSearchHistory();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putString(SEARCH_BOX_EXTRA, searchBoxEditText.getText().toString());
+        outState.putString(DEFINITION_EXTRA, displayTextView.getText().toString());
     }
 }
