@@ -19,6 +19,7 @@
         android:hint="@string/search_hint"
         android:scrollHorizontally="true"
         android:lines="1"
+        android:inputType="textLongMessage"
         android:background="@drawable/frame_for_search_box"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
