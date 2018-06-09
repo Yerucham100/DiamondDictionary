@@ -20,6 +20,7 @@ import java.util.Scanner;
 public class NetworkUtils
 {
     public static final String ONLINE_DICTIONARY_BASE_URL = "https://od-api.oxforddictionaries.com:443/api/v1/entries";
+    public static final String URL_FOR_OXFORD = "https://en.oxforddictionaries.com";
     public static final String LANGUAGE = "en";
     public static final String WORD_NOT_FOUND = "word_not_found";
     private static final String testWord = "car";
@@ -179,6 +180,57 @@ public class NetworkUtils
         else
             return false;
     }
+
+
+    /**
+     * Method to get the HTML of oxforddictionaries online homepage
+     * @return the HTML of oxforddictionaries online homepage
+     * @throws IOException if connection error occurs
+     */
+    public static String getHTMLForWordOfTheDay() throws IOException
+    {
+        URL url;
+        try
+        {
+            url = new URL(URL_FOR_OXFORD);
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        InputStream stream = connection.getInputStream();
+        Scanner sc = new Scanner(stream);
+        sc.useDelimiter("\\A");
+
+        if (sc.hasNext())
+            return sc.next();
+
+        return null;
+    }
+
+    /**
+     * Method to get the Word of the Day
+     * @param html a string containing the html contents of the web page
+     * @return The Word of the Day
+     */
+    public static String getWordOfTheDay(String html)
+    {
+        if (html == null)
+            return null;
+
+        //Attempting to get the substring within the html corresponding to the Word of the Day
+        String startPoint = "find out what it means";
+        int start = html.indexOf(startPoint);
+        int newStart = html.indexOf("definition", start) + 11;
+        int end = html.indexOf(">", newStart) - 1;
+
+        return html.substring(newStart, end);
+    }
+
 
 
 }

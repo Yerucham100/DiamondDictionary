@@ -67,6 +67,9 @@ public class DbUtils
      */
     public static boolean insertWordInDatabase(String word, String meaning, Context context)
     {
+        if (getInfoFromDatabase(word, context))
+            return false;
+
         ContentResolver resolver = context.getContentResolver();
         ContentValues cv = new ContentValues();
         cv.put(SearchHistoryContract.SearchHistory.COLUMN_WORD, word);

@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.example.diacious.diamonddictionary.utils.DateUtils;
 import com.example.diacious.diamonddictionary.utils.DbUtils;
 import com.example.diacious.diamonddictionary.utils.NetworkUtils;
+import com.example.diacious.diamonddictionary.utils.NotificationUtils;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -76,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        WordOfTheDayUtilities.scheduleWordOfTheDayReminder(this);
+
         if (savedInstanceState != null)
         {
             if (savedInstanceState.containsKey(SEARCH_BOX_EXTRA))
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (thatStartedThisActivity != null)
             if (thatStartedThisActivity.hasExtra(SEARCH_BOX_EXTRA))
             {
+                NotificationUtils.clearNotifications(this);
                 String word = thatStartedThisActivity.getStringExtra(SEARCH_BOX_EXTRA);
                 searchBoxEditText.setText(word);
                 startSearch(word);

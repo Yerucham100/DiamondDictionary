@@ -3,6 +3,7 @@
           package="com.example.diacious.diamonddictionary">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -27,6 +28,9 @@
         <activity android:name=".SearchHistoryActivity">
         </activity>
         <service android:name=".AddWordIntentService"
+            android:exported="false"/>
+
+        <service android:name=".WordOfTheDayService"
             android:exported="false"/>
     </application>
 
