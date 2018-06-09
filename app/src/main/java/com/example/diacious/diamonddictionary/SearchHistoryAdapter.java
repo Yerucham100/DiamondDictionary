@@ -15,10 +15,12 @@ import android.widget.TextView;
 public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdapter.SearchItemViewHolder>
 {
     private Cursor mCursor;
+    private ListItemClickListener mListItemClickListener;
 
-    public SearchHistoryAdapter(Cursor cursor)
+    public SearchHistoryAdapter(Cursor cursor, ListItemClickListener listener)
     {
         mCursor = cursor;
+        mListItemClickListener = listener;
     }
     @Override
     public SearchItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -55,7 +57,12 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
         return mCursor.getCount();
     }
 
-    public class SearchItemViewHolder extends RecyclerView.ViewHolder
+    public interface ListItemClickListener
+    {
+        void onListItemClicked(String word);
+    }
+
+    public class SearchItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private TextView searchItemTextView;
         private TextView lastSearchTextView;
@@ -67,6 +74,13 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
             searchItemTextView = (TextView) view.findViewById(R.id.search_word_tv);
             lastSearchTextView = (TextView) view.findViewById(R.id.last_search_tv);
             searchFreqTextView = (TextView) view.findViewById(R.id.search_freq_tv_4_search_history_activity);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            mListItemClickListener.onListItemClicked(searchItemTextView.getText().toString());
         }
     }
 }

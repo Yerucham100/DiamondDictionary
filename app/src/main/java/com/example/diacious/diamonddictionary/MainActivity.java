@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private final String SEARCH_QUERY_URL_EXTRA = "search_query_url";
     private final String SEARCH_WORD_EXTRA = "search_word_extra";
 
-    private final String SEARCH_BOX_EXTRA = "search_box";
+    public static final String SEARCH_BOX_EXTRA = "search_box";
     private final String DEFINITION_EXTRA = "def_extra";
 
     private String currentWord = "";
@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v)
             {
-                startSearch();
+                String word = searchBoxEditText.getText().toString().toLowerCase();
+                startSearch(word);
             }
         });
 
@@ -82,14 +83,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 displayTextView.setText(savedInstanceState.getString(DEFINITION_EXTRA));
         }
 
+        Intent thatStartedThisActivity = getIntent();
+        if (thatStartedThisActivity != null)
+            if (thatStartedThisActivity.hasExtra(SEARCH_BOX_EXTRA))
+            {
+                String word = thatStartedThisActivity.getStringExtra(SEARCH_BOX_EXTRA);
+                searchBoxEditText.setText(word);
+                startSearch(word);
+            }
+
+
     }
 
     /**
      * Method to search for the word
+     * @param word The word to be searched for
      */
-    public void startSearch()
+    public void startSearch(String word)
     {
-        String word = searchBoxEditText.getText().toString().toLowerCase();
         if (currentWord.equals(word))
             return;
 

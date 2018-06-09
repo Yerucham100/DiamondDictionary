@@ -1,6 +1,7 @@
 package com.example.diacious.diamonddictionary;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -10,7 +11,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-public class SearchHistoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>
+public class SearchHistoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        SearchHistoryAdapter.ListItemClickListener
 
 {
 
@@ -71,7 +73,7 @@ public class SearchHistoryActivity extends AppCompatActivity implements LoaderMa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data)
     {
         searchHistoryCursor = data;
-        adapter = new SearchHistoryAdapter(searchHistoryCursor);
+        adapter = new SearchHistoryAdapter(searchHistoryCursor, this);
 
         searchHistoryRecyclerView.setAdapter(adapter);
         searchHistoryRecyclerView.setHasFixedSize(false);
@@ -81,5 +83,13 @@ public class SearchHistoryActivity extends AppCompatActivity implements LoaderMa
     public void onLoaderReset(Loader<Cursor> loader)
     {
 
+    }
+
+    @Override
+    public void onListItemClicked(String word)
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(MainActivity.SEARCH_BOX_EXTRA, word);
+        startActivity(intent);
     }
 }
