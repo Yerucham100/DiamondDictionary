@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private final String SEARCH_WORD_EXTRA = "search_word_extra";
 
     public static final String SEARCH_BOX_EXTRA = "search_box";
-    private final String DEFINITION_EXTRA = "def_extra";
+    public static final String DEFINITION_EXTRA = "def_extra";
 
     private String currentWord = "";
 
@@ -190,7 +190,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     lastSearched = DateUtils.getDateInStandardFormat(timeStamp);
                     if (!(meaning.equals(NetworkUtils.NO_NETWORK) || meaning.equals(NetworkUtils.WORD_NOT_FOUND)))
                     {
-                        DbUtils.insertWordInDatabase(word, meaning, MainActivity.this);//TODO This should be done by a service
+                        Intent intent = new Intent();
+                        intent.putExtra(SEARCH_BOX_EXTRA, word);
+                        intent.putExtra(DEFINITION_EXTRA, meaning);
+
+                        startService(intent);
                     }
 
                 }
