@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String DEFINITION_EXTRA = "def_extra";
 
     private String currentWord = "";
+    private boolean wordInDatabase = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -190,11 +191,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     lastSearched = DateUtils.getDateInStandardFormat(timeStamp);
                     if (!(meaning.equals(NetworkUtils.NO_NETWORK) || meaning.equals(NetworkUtils.WORD_NOT_FOUND)))
                     {
-                        Intent intent = new Intent();
-                        intent.putExtra(SEARCH_BOX_EXTRA, word);
-                        intent.putExtra(DEFINITION_EXTRA, meaning);
-
-                        startService(intent);
+                        wordInDatabase = false;
                     }
 
                 }
@@ -230,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         else if (data[0] != null && data[0] != "")
         {
+            addToDataBase(currentWord, data[0]);
+
             displayTextView.setVisibility(View.VISIBLE);
             noNetworkTextView.setVisibility(View.INVISIBLE);
             definition = NetworkUtils.getDefinitions(data[0]);
@@ -283,5 +282,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onSaveInstanceState(outState);
         outState.putString(SEARCH_BOX_EXTRA, searchBoxEditText.getText().toString());
         outState.putString(DEFINITION_EXTRA, displayTextView.getText().toString());
+    }
+
+    /**
+     * Method to add to the database
+     * @param word the word to be added
+     * @param meaning the meaning of the word
+     */
+    private void addToDataBase(String word, String meaning)
+    {
+        if (wordInDatabase)
+            return;
+        Intent intent = new Intent(this, AddWordIntentService.class);
+        intent.putExtra(SEARCH_BOX_EXTRA, word);
+        intent.putExtra(DEFINITION_EXTRA, meaning);
+
+        startService(intent);
     }
 }

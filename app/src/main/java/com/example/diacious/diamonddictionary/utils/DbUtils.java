@@ -72,6 +72,8 @@ public class DbUtils
         cv.put(SearchHistoryContract.SearchHistory.COLUMN_WORD, word);
         cv.put(SearchHistoryContract.SearchHistory.COLUMN_DEFINITION, meaning);
         cv.put(SearchHistoryContract.SearchHistory.COLUMN_SEARCH_FREQUENCY, 1);
+        cv.put(SearchHistoryContract.SearchHistory.COLUMN_LAST_SEARCHED, new Timestamp(System.currentTimeMillis()).toString()
+                .substring(0,19));
 
         Uri uri = resolver.insert(SearchHistoryContract.SearchHistory.CONTENT_URI, cv);
 
