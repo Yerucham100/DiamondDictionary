@@ -20,4 +20,8 @@ Computers.\n
     <string name="word_of_the_day">Word of the Day</string>
     <string name="todays_word_is">Today\'s word is %s</string>
     <string name="save_word_and_dismiss">Save Word and Dismiss</string>
+    <string name="powered_by_oxford">Powered By Oxford Dictionaries Online</string>
+    <string name="copyright">© Yerucham 2018</string>
+    <string name="about">About</string>
+    <string name="search_history">Search History</string>
 </resources>

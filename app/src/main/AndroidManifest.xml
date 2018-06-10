@@ -27,11 +27,16 @@
 
         <activity android:name=".SearchHistoryActivity">
         </activity>
-        <service android:name=".AddWordIntentService"
+
+        <service
+            android:name=".AddWordIntentService"
+            android:exported="false"/>
+        <service
+            android:name=".WordOfTheDayService"
             android:exported="false"/>
 
-        <service android:name=".WordOfTheDayService"
-            android:exported="false"/>
+        <activity android:name=".AboutActivity">
+        </activity>
     </application>
 
 </manifest>

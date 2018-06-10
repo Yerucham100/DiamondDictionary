@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +37,10 @@ public class SearchHistoryActivity extends AppCompatActivity implements LoaderMa
         Loader searchLoader = loaderManager.getLoader(LOADER_ID);
 
         loaderManager.restartLoader(LOADER_ID, null, this);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(getString(R.string.search_history));
 
     }
 

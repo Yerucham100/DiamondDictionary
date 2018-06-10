@@ -15,12 +15,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.example.diacious.diamonddictionary.utils.DateUtils;
 import com.example.diacious.diamonddictionary.utils.DbUtils;
 import com.example.diacious.diamonddictionary.utils.NetworkUtils;
 import com.example.diacious.diamonddictionary.utils.NotificationUtils;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private EditText searchBoxEditText;
     private Button searchButton;
+    private ScrollView displayScrollView;
     private TextView displayTextView;
     private TextView noNetworkTextView;
     private TextView lastSearchedTextView;
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         lastSearchedLabelTextView = (TextView) findViewById(R.id.last_searched_label_tv);
         searchFreqLabelTextView = (TextView) findViewById(R.id.search_freq_label_tv);
         loadingProgressBar = (ProgressBar) findViewById(R.id.loading_pb);
+
+        displayScrollView = (ScrollView) findViewById(R.id.display_sv);
 
         searchButton.setOnClickListener(new View.OnClickListener()
         {
@@ -222,7 +225,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         loadingProgressBar.setVisibility(View.INVISIBLE);
         String definition;
         if (data[0] == null)
+        {
+            displayTextView.setVisibility(View.VISIBLE);
             displayTextView.setText(getString(R.string.word_not_found, currentWord));
+        }
 
         else if (data[0].equals(NetworkUtils.NO_NETWORK))
         {
@@ -264,6 +270,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         startActivity(intent);
     }
 
+    /**
+     * Method to open AboutActivity
+     */
+    private void openAbout()
+    {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -274,10 +289,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == R.id.search_hist_menu_item)
+        int id = item.getItemId();
+
+        switch (id)
         {
-            openSearchHistory();
+            case R.id.search_hist_menu_item:
+                openSearchHistory();
+                break;
+            case R.id.about_menu_item:
+                openAbout();
+                break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

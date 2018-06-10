@@ -27,6 +27,10 @@ public class NotificationUtils
     private static String todaysWord = null;
     private static final int NOTIFICATION_ID = 13;
 
+    /**
+     * Method to issue notification on Word of the day
+     * @param context the calling Activity/Service Context
+     */
     public static void informUserOfWordOfTheDay(Context context)
     {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -52,6 +56,12 @@ public class NotificationUtils
 
     }
 
+    /**
+     * Method to create a pending intent for Notification
+     * @param context The calling Activity/Service context
+     * @param word The word of the day
+     * @return The pending intent
+     */
     private static PendingIntent getPendingIntent(Context context, String word)
     {
         Intent intent = new Intent(context, MainActivity.class);
@@ -65,6 +75,11 @@ public class NotificationUtils
         return pendingIntent;
     }
 
+    /**
+     * Method to get LargeIcon for notification
+     * @param context The calling Activity/Service context
+     * @return The large icon
+     */
     private static Bitmap getLargeIcon(Context context)
     {
         Resources resources = context.getResources();
@@ -73,6 +88,10 @@ public class NotificationUtils
         return largeIcon;
     }
 
+    /**
+     * Method to get Word of the Day
+     * @return The word of the day
+     */
     private static String getTodaysWord()
     {
         try
@@ -89,6 +108,11 @@ public class NotificationUtils
 
     }
 
+    /**
+     * Method to create Notification Action that will save a word of the day in the database
+     * @param context The calling Activity/Service context
+     * @return The Notification action
+     */
     private static NotificationCompat.Action getSaveAndDismissAction(Context context)
     {
         Intent intent = new Intent(context, AddWordIntentService.class);
@@ -103,6 +127,10 @@ public class NotificationUtils
         return action;
     }
 
+    /**
+     * Method to clear all notifications
+     * @param context The calling Activity/Service context
+     */
     public static void clearNotifications(Context context)
     {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
