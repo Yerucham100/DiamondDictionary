@@ -118,8 +118,7 @@
        app:layout_constraintLeft_toLeftOf="parent"
        android:layout_marginStart="8dp"
        android:layout_marginEnd="8dp"
-       android:padding="8dp"
-       android:background="@drawable/frame_for_definition_box">
+       android:padding="8dp">
 
        <TextView
         android:id="@+id/display_tv"

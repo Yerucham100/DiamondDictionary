@@ -46,7 +46,7 @@ public class WordOfTheDayUtilities
                 .setLifetime(Lifetime.FOREVER)
                 .setReplaceCurrent(true)
                 .setRecurring(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
+                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
                 .addConstraint(Constraint.ON_ANY_NETWORK)
                 .build();
 
